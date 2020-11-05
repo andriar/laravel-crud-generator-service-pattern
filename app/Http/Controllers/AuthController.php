@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\UserService as US;
+use App\Services\AuthService as AuS;
 
 class AuthController extends Controller
 {
+    protected $userService;
+    protected $authService;
+
+    public function __construct(US $userService, AuS $authService)
+    {
+        $this->userService = $userService;
+        $this->authService = $authService;
+    }
+
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -14,22 +25,52 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        $data = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
+        try {
+            $userData = $this->userService->findByMail($request->email);
 
-        $userData = User::where('email', $data['email'])->first();
- 
-        if (auth()->attempt($data)) {
-            $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
+            if($userData)
+            {
+                if($userData['email_verified_at'] === null || $userData['is_active'] !== 1)
+                {
+                    return response()->json([
+                        'error' => 'user need activation !',
+                        'code' => 'USER_NEED_ACTIVATION'
+                    ], 401);
+                }
+                else
+                {
+                    $data = [
+                        'email' => $request->email,
+                        'password' => $request->password
+                    ];
+                    
+                    $login = $this->authService->login($data);
+
+                    if ($login) 
+                    {
+                        return response()->json($login, 200);
+                    } 
+                    else 
+                    {
+                        return response()->json([
+                            'error' => 'Unauthorized',
+                            'code' => 'UNAUTHORIZED'
+                        ], 401);
+                    }
+                }
+            }
+            else
+            {
+                return response()->json([
+                    'error' => 'the user is not registered yet',
+                    'code' => 'USER_NOT_REGISTERED'
+                ], 401);
+            }
+        } catch (\Throwable $th) {
             return response()->json([
-                'token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $userData
-            ], 200);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+                'error' => $th->getMessage(),
+                'code' => 'INTERNAL_SERVER_ERROR',
+            ], 500);
         }
     }
 
