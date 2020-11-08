@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserService as US;
-
+use App\Services\MailService as MS;
 class UserController extends Controller
 {
     protected $userService;
+    protected $mailService;
 
-    public function __construct(US $userService)
+    public function __construct(US $userService, MS $mailService)
     {
         $this->userService = $userService;
+        $this->mailService = $mailService;
     }
 
     public function index()
@@ -40,6 +42,7 @@ class UserController extends Controller
 
         try {
             $user = $this->userService->store($request->all());
+            // $this->mailService->verificationMail($user);
             return \response()->json($user, 201);
         } catch (\Throwable $th) {
             return response()->json([
@@ -87,7 +90,7 @@ class UserController extends Controller
     public function deletePermanent($id)
     {
         try {
-            $user = $this->userService->restore($id);
+            $user = $this->userService->permanentDelete($id);
             return \response()->json($user, 200);
         } catch (\Throwable $th) {
             return response()->json([
