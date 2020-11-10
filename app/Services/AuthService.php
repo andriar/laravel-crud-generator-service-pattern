@@ -28,4 +28,11 @@ class AuthService
         }
     }
 
+    public function verified(String $id)
+    {
+        return User::where('id', $id)->update([
+            'email_verified_at' => date_create()
+        ]);
+    }
+
 }

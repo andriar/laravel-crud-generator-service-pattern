@@ -21,6 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/oauth/login', [AuthController::class, 'login'])->name('login');
+Route::post('/oauth/register', [AuthController::class, 'register'])->name('register');
+Route::post('/oauth/activation', [AuthController::class, 'activation'])->name('activation');
 Route::middleware('auth:api')->post('/oauth/logout', [AuthController::class, 'logout'])->name('logout');
 
 

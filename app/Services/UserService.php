@@ -34,14 +34,8 @@ class UserService
     public function store(Array $payload)
     {
         $payload['password'] = bcrypt($payload['password']);
-        if( $payload['first_name'] && $payload['last_name'])
-        {
-            $payload['full_name'] = $payload['first_name'].' '.$payload['last_name'];
-        }else
-        {
-            $payload['full_name'] = '';
-        }
-
+        $payload['full_name'] = $payload['first_name'].' '.$payload['last_name'];
+    
         return User::create($payload);
     }
 
