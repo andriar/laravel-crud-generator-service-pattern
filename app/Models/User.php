@@ -9,9 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\Uuid;
+use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens, Uuid, SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, Uuid, SoftDeletes, HasRoles;
 
     protected $primaryKey = 'id';
 

@@ -18,7 +18,7 @@ class UserService
 
     public function fetch()
     {
-        return User::get();
+        return User::with('roles')->get();
     }
 
     public function fetchWithTrashed()
@@ -35,8 +35,11 @@ class UserService
     {
         $payload['password'] = bcrypt($payload['password']);
         $payload['full_name'] = $payload['first_name'].' '.$payload['last_name'];
-    
-        return User::create($payload);
+        
+        $user = User::create($payload);
+        $user->assignRole($payload['role']);
+        
+        return $user;
     }
 
     public function update(Array $payload, String $id)

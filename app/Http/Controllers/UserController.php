@@ -38,9 +38,16 @@ class UserController extends Controller
             'phone_number' => 'required|string|min:6',
             'is_active' => 'required|boolean',
             'password' => 'required|string|min:8',
+            'role' => 'string|in:SUPERADMIN,EMPLOYEE,OWNER,CASHIER,CHEF',
         ]);
 
         try {
+            if(!$request->role)
+            {
+                $request->merge([
+                    'role' => 'EMPLOYEE',
+                ]);
+            }
             $user = $this->userService->store($request->all());
             // $this->mailService->verificationMail($user);
             return \response()->json($user, 201);
