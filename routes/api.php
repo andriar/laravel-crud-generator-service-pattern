@@ -25,12 +25,13 @@ Route::post('/oauth/register', [AuthController::class, 'register'])->name('regis
 Route::post('/oauth/activation', [AuthController::class, 'activation'])->name('activation');
 Route::middleware('auth:api')->post('/oauth/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-Route::middleware('auth:api')->get('/user', [UserController::class, 'index']);
-Route::middleware('auth:api')->post('/user', [UserController::class, 'store']);
-Route::middleware('auth:api')->patch('/user/{id}', [UserController::class, 'update']);
-Route::middleware('auth:api')->delete('/user/{id}', [UserController::class, 'delete']);
-Route::middleware('auth:api')->delete('/user/{id}/permanent', [UserController::class, 'deletePermanent']);
-Route::middleware('auth:api')->patch('/user/{id}/restore', [UserController::class, 'restore']);
-Route::middleware('auth:api')->get('/user-withtrashed', [UserController::class, 'withtrashed']);
-Route::middleware('auth:api')->get('/user-onlytrashed', [UserController::class, 'onlytrashed']);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('/user', [UserController::class, 'index']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::patch('/user/{id}', [UserController::class, 'update']);
+    Route::delete('/user/{id}', [UserController::class, 'delete']);
+    Route::delete('/user/{id}/permanent', [UserController::class, 'deletePermanent']);
+    Route::patch('/user/{id}/restore', [UserController::class, 'restore']);
+    Route::get('/user-withtrashed', [UserController::class, 'withtrashed']);
+    Route::get('/user-onlytrashed', [UserController::class, 'onlytrashed']);
+});

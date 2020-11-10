@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         PrettyRoutes\ServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         /*
          * Application Service Providers...
          */
