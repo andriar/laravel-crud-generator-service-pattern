@@ -32,12 +32,17 @@ class MerchantController extends Controller
         $request->validate([
             'name' => 'required|string',
             'phone_number' => 'required|email|unique:merchants,email',
-            'phone_number' => 'required|string|unique:merchants,phone_number',
+            'phone_number' => 'required|numeric|unique:merchants,phone_number',
             'is_active' => 'required|boolean',
             'merchant_id' => 'uuid|exists:merchants,id',
         ]);
 
         try {
+            $code = $this->merchantService->getMerchantCode($request->all());
+            $request->merge([
+                'merchant_code' => $code
+            ]);
+
             $merchant = $this->merchantService->store($request->all());
             return \response()->json($merchant, 201);
         } catch (\Throwable $th) {
@@ -53,7 +58,7 @@ class MerchantController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:merchants,email,'.$id,
-            'phone_number' => 'required|string|unique:merchants,phone_number,'.$id,
+            'phone_number' => 'required|numeric|unique:merchants,phone_number,'.$id,
             'is_active' => 'required|boolean',
             'merchant_id' => 'uuid|exists:merchants,id',
         ]);

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Merchant;
-
+use Illuminate\Support\Str;
 class MerchantService
 {
     protected $join = [
@@ -38,5 +38,30 @@ class MerchantService
     public function delete(String $id)
     {
         return Merchant::find($id)->delete();
+    }
+
+    public function getMerchantCode(Array $payload)
+    {
+        $loop = 0;
+        $basecode= Str::of($payload['name'])->replace(' ', '')->upper();
+        $code= $basecode;
+        $ping = 0;
+        
+        while($loop < 1)
+        {
+            $ping++;
+           
+            $merchant = Merchant::where('merchant_code', $code)->first();
+            if(filled($merchant))
+            {
+                $code = $basecode;
+                $code = $code.Str::of(Str::random(6))->upper();
+            }
+            else
+            {
+                $loop++;
+            }
+        }
+        return $code;
     }
 }
