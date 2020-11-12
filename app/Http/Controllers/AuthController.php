@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\UserService as US;
 use App\Services\AuthService as AuS;
+use App\Services\MerchantService as MeS;
 use Illuminate\Support\Facades\Crypt;
 class AuthController extends Controller
 {
     protected $userService;
     protected $authService;
+    protected $merchantService;
 
-    public function __construct(US $userService, AuS $authService)
+    public function __construct(US $userService, AuS $authService, Mes $merchantService)
     {
         $this->userService = $userService;
         $this->authService = $authService;
+        $this->merchantService = $merchantService;
     }
 
     public function login(Request $request)
@@ -83,15 +86,31 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
+            'merchant_name' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'phone_number' => 'required|string|min:6',
+            'phone_number' => 'required|numeric|min:6',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         try {
-            $user = $this->userService->store($validated);
+            $merchantData = ([
+                'name' => $request->merchant_name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+            ]);
+
+            $code = $this->merchantService->getMerchantCode($merchantData);
+            
+            $merchantData['merchant_code'] = $code;
+
+            $merchant = $this->merchantService->store($merchantData);
+            
+            $userData = $validated;
+            $userData['role'] = "OWNER";
+            $userData['merchant_id'] = $merchant->id;
+            $user = $this->userService->store($userData);
             return \response()->json($user, 201);
         } catch (\Throwable $th) {
             return response()->json([

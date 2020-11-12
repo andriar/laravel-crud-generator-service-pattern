@@ -6,29 +6,33 @@ use App\Models\User;
 
 class UserService
 {
+    protected $join = [
+        'roles', 'merchant'
+    ];
+
     public function findByMail(String $mail)
     {
-       return User::where('email', $mail)->first();
+       return User::with($this->join)->where('email', $mail)->first();
     }
 
     public function findById(String $id)
     {
-       return User::where('id', $id)->first();
+       return User::with($this->join)->where('id', $id)->first();
     }
 
     public function fetch()
     {
-        return User::with('roles')->get();
+        return User::with($this->join)->get();
     }
 
     public function fetchWithTrashed()
     {
-        return User::withTrashed()->get();
+        return User::with($this->join)->withTrashed()->get();
     }
 
     public function fetchOnlyTrashed()
     {
-        return User::onlyTrashed()->get();
+        return User::with($this->join)->onlyTrashed()->get();
     }
 
     public function store(Array $payload)

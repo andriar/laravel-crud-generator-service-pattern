@@ -1,21 +1,27 @@
 ## GENERAL
+
 Point of sales API apps for **Coffee Shop** or **UMKM** would be open soon !
 
 ## FRAMEWORK
+
 This apps using latest update laravel 8 **5 November 2020**
 
 ## REQUIREMENT
+
 1. composer
 2. PHP 7.3
-3. Coffee 
+3. Coffee
 4. Girlfriend(s)
 
 ## HOWTO
 
-- composer Install
-- php artisan passport:install --uuids
-- php artisan db:seed
-- php artisan serve
+-   composer Install
+-   php artisan passport:install --uuids
+-   php artisan db:seed
+-   php artisan serve
 
+## API DOCUMENTATION
+
+_**https://www.getpostman.com/collections/06d08b6df1595cd907cf**_
 
 _**ENJOY !**_

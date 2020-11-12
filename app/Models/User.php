@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\Uuid;
 use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens, Uuid, SoftDeletes, HasRoles;
@@ -45,4 +46,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
     ];
+
+    public function merchant()
+    {
+        return $this->hasOne('App\Models\Merchant', 'id', 'merchant_id');
+    }
 }
