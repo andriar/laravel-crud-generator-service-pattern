@@ -96,7 +96,7 @@ to get data where the filter is on the relation table. example:
 
 to get filter data. example :
 
-`filter=['name,joko']`
+`filter[]=name,joko`
 
 if more than 1 add 1 more keys with **AND** or **OR**
 
