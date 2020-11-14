@@ -20,6 +20,36 @@ This apps using latest update laravel 8 **5 November 2020**
 -   php artisan db:seed
 -   php artisan serve
 
+## HOWTO MAKE AN API
+
+before u make an api, make sure you already made a migration file
+
+`php artisan make:model create_{plural_table_name}_table`
+
+then change id like this `$this->uuid('id')->primary()` and add `$table->softDeletes();`
+
+### GENERATE API
+
+`php artisan generate:crud {name_of_table_singular}`
+
+this command will create some file (CONTROLLER, SERVICE, MODEL AND add list of API)
+
+example:
+`php artisan generate:crud Product`
+
+make some files:
+1. ProductController
+2. ProductService
+3. Product (Model)
+4. add list of CRUD api Product
+
+what u need to do is,
+1. tidy list of API
+2. insert some fillable field on Model
+3. add some validation on controller when store and update data
+4. **DONE!**
+
+
 ## API DOCUMENTATION
 
 _**https://www.getpostman.com/collections/06d08b6df1595cd907cf**_
