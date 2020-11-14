@@ -16,10 +16,10 @@ class UserController extends Controller
         $this->mailService = $mailService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $user = $this->userService->fetch();
+            $user = $this->userService->fetch($request);
             return \response()->json($user, 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -49,7 +49,6 @@ class UserController extends Controller
                 ]);
             }
             $user = $this->userService->store($request->all());
-            // $this->mailService->verificationMail($user);
             return \response()->json($user, 201);
         } catch (\Throwable $th) {
             return response()->json([
@@ -123,7 +122,10 @@ class UserController extends Controller
     public function withtrashed(Request $request)
     {
         try {
-            $user = $this->userService->fetchWithTrashed();
+            $request->merge([
+                'with_trashed' => true,
+            ]);
+            $user = $this->userService->fetch($request);
             return \response()->json($user, 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -136,7 +138,10 @@ class UserController extends Controller
     public function onlytrashed(Request $request)
     {
         try {
-            $user = $this->userService->fetchOnlyTrashed();
+            $request->merge([
+                'only_trashed' => true,
+            ]);
+            $user = $this->userService->fetch($request);
             return \response()->json($user, 200);
         } catch (\Throwable $th) {
             return response()->json([
