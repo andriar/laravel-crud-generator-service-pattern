@@ -29,6 +29,7 @@ _**ENJOY !**_
 ## FILTER/PARAMS DOCUMENTATION
 
 1. JOIN
+
 params join using to get data on table where has an relation, example
 **USER_TABLE has relation with ROLE_TABLE** then params u need to throw :
 `join=role` plural or not base on relation 1 to many or 1 to 1
@@ -38,21 +39,25 @@ next u cant join more than 1 table using point (.) to separate and comma (,) to 
 - `join=merchant.user,role` you will get relation **MERCHANT_TABLE** and **ROLE_TABLE**
 
 2. COUNT
+
 Same as JOIN but you will get counted data from the relation, example :
 `count=merchant` you will get data **merchant_count: 5**
 `count=merchant,role`
 
 3. SORT
-> sorting base on field name, example
+
+sorting base on field name, example
 `sort=name,ASC` after sort={field_name},ASC/DESC
 
 4. PER_PAGE & PAGE
-> to make pagination, example :
+
+to make pagination, example :
 `per_page=5`
 if u need to move to other page just add params `page`
 `per_page=5&page=2`
 
 5. LIMIT
+
 to limit how much data will shown, example :
 `limit=5`
 
@@ -65,12 +70,14 @@ to only archived data (soft deleted data), example :
 `only_trashed=true`
 
 8. WHERE_HAS (array)
+
 to get data where the filter is on the relation table. example:
 
 `where_has[]=merchant,name,coffee` after where_has=['{relation_name},{field_name},{keyword}']
 `where_has[]=merchant,name,coffee'&where_has[]=role,name,admin`
 
 9. FILTER (array)
+
 to get filter data. example :
 `filter=['name,joko']`
 
