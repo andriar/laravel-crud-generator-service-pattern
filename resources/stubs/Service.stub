@@ -1,0 +1,47 @@
+<?php 
+
+namespace App\Services;
+
+use App\Models\{{modelName}};
+use App\Traits\Search as Search;
+class {{modelName}}Service
+{
+    protected $join = [];
+
+    public function findById(String $id)
+    {
+       return {{modelName}}::with($this->join)->where('id', $id)->first();
+    }
+
+    public function fetch($payload = [])
+    {
+        return Search::generate({{modelName}}::class, $payload);
+    }
+
+    public function store(Array $payload)
+    {
+        ${{modelNameSingular}} = {{modelName}}::create($payload);
+        return ${{modelNameSingular}};
+    }
+
+    public function update(Array $payload, String $id)
+    {
+        ${{modelNameSingular}} = {{modelName}}::where('id', $id)->first();
+        return ${{modelNameSingular}}->update($payload);
+    }
+
+    public function delete(String $id)
+    {
+        return {{modelName}}::find($id)->delete();
+    }
+
+    public function permanentDelete(String $id)
+    {
+        return {{modelName}}::where('id', $id)->withTrashed()->forceDelete();
+    }
+
+    public function restore(String $id)
+    {
+        return {{modelName}}::where('id', $id)->withTrashed()->restore();
+    }
+}
