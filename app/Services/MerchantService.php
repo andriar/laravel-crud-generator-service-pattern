@@ -4,11 +4,9 @@ namespace App\Services;
 
 use App\Models\Merchant;
 use Illuminate\Support\Str;
+use App\Traits\Search as Search;
 class MerchantService
 {
-    protected $join = [
-       'main_merchant'
-    ];
 
     protected $joinCount = [
         'users', 'merchants',
@@ -19,9 +17,9 @@ class MerchantService
         return Merchant::where('id', $id)->first();
     }
 
-    public function fetch()
+    public function fetch($payload = [])
     {
-        return Merchant::with($this->join)->withCount($this->joinCount)->get();
+        return Search::generate(Merchant::class, $payload);
     }
 
     public function store(Array $payload)

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
-
+use App\Traits\Search as Search;
 class UserService
 {
     protected $join = [
@@ -20,19 +20,9 @@ class UserService
        return User::with($this->join)->where('id', $id)->first();
     }
 
-    public function fetch()
+    public function fetch($payload = [])
     {
-        return User::with($this->join)->get();
-    }
-
-    public function fetchWithTrashed()
-    {
-        return User::with($this->join)->withTrashed()->get();
-    }
-
-    public function fetchOnlyTrashed()
-    {
-        return User::with($this->join)->onlyTrashed()->get();
+        return Search::generate(User::class, $payload);
     }
 
     public function store(Array $payload)

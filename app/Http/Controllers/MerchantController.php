@@ -14,10 +14,10 @@ class MerchantController extends Controller
         $this->merchantService = $merchantService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $merchant = $this->merchantService->fetch();
+            $merchant = $this->merchantService->fetch($request);
             return \response()->json($merchant, 200);
         } catch (\Throwable $th) {
             return response()->json([
