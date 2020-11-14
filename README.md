@@ -25,3 +25,56 @@ This apps using latest update laravel 8 **5 November 2020**
 _**https://www.getpostman.com/collections/06d08b6df1595cd907cf**_
 
 _**ENJOY !**_
+
+## FILTER/PARAMS DOCUMENTATION
+
+1. JOIN
+params join using to get data on table where has an relation, example
+**USER_TABLE has relation with ROLE_TABLE** then params u need to throw :
+`join=role` plural or not base on relation 1 to many or 1 to 1
+
+next u cant join more than 1 table using point (.) to separate and comma (,) to add more than 1 join table
+- `join=merchant.user` BASE_TABLE has relation to **MERCHANT_TABLE**, and **MERCHANT_TABLE** has relation to **USER_TABLE**
+- `join=merchant.user,role` you will get relation **MERCHANT_TABLE** and **ROLE_TABLE**
+
+2. COUNT
+Same as JOIN but you will get counted data from the relation, example :
+`count=merchant` you will get data **merchant_count: 5**
+`count=merchant,role`
+
+3. SORT
+> sorting base on field name, example
+`sort=name,ASC` after sort={field_name},ASC/DESC
+
+4. PER_PAGE & PAGE
+> to make pagination, example :
+`per_page=5`
+if u need to move to other page just add params `page`
+`per_page=5&page=2`
+
+5. LIMIT
+to limit how much data will shown, example :
+`limit=5`
+
+6. WITH_TRASHED (boolean)
+to show all data + archived data (soft deleted data), example :
+`with_trashed=true`
+
+7. WITH_TRASHED (boolean)
+to only archived data (soft deleted data), example :
+`only_trashed=true`
+
+8. WHERE_HAS (array)
+to get data where the filter is on the relation table. example:
+
+`where_has[]=merchant,name,coffee` after where_has=['{relation_name},{field_name},{keyword}']
+`where_has[]=merchant,name,coffee'&where_has[]=role,name,admin`
+
+9. FILTER (array)
+to get filter data. example :
+`filter=['name,joko']`
+
+if more than 1 add 1 more keys with **AND** or **OR**
+`filter[]=name,joko,AND&filter[]=is_active,1`
+or
+`filter[]=name,joko,OR&filter[]=is_active,1`
