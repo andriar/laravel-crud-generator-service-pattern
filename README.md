@@ -31,8 +31,9 @@ _**ENJOY !**_
 ### JOIN
 
 params join using to get data on table where has an relation, example
-> **USER_TABLE has relation with ROLE_TABLE** then params u need to throw :
-> `join=role` plural or not base on relation 1 to many or 1 to 1
+**USER_TABLE has relation with ROLE_TABLE** then params u need to throw :
+`join=role` plural or not base on relation 1 to many or 1 to 1
+
 
 
 next u cant join more than 1 table using point (.) to separate and comma (,) to add more than 1 join table
@@ -48,7 +49,7 @@ Same as JOIN but you will get counted data from the relation, example :
 ### SORT
 
 sorting base on field name, example
-> `sort=name,ASC` after sort={field_name},ASC/DESC
+`sort=name,ASC` after sort={field_name},ASC/DESC
 
 ### PER_PAGE & PAGE
 
@@ -79,7 +80,7 @@ to get data where the filter is on the relation table. example:
 `where_has[]=merchant,name,coffee` after where_has=['{relation_name},{field_name},{keyword}']
 `where_has[]=merchant,name,coffee'&where_has[]=role,name,admin`
 
-9. FILTER (array)
+### FILTER (array)
 
 to get filter data. example :
 `filter=['name,joko']`
