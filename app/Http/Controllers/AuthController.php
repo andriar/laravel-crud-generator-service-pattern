@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        try {
+        // try {
             $userData = $this->userService->findByMail($request->email);
 
             if($userData)
@@ -69,12 +69,12 @@ class AuthController extends Controller
                     'code' => 'USER_NOT_REGISTERED'
                 ], 401);
             }
-        } catch (\Throwable $th) {
-            return response()->json([
-                'error' => $th->getMessage(),
-                'code' => 'INTERNAL_SERVER_ERROR',
-            ], 500);
-        }
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'error' => $th->getMessage(),
+        //         'code' => 'INTERNAL_SERVER_ERROR',
+        //     ], 500);
+        // }
     }
 
     public function logout(Request $request)

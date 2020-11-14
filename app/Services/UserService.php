@@ -38,7 +38,6 @@ class UserService
     public function store(Array $payload)
     {
         $payload['password'] = bcrypt($payload['password']);
-        $payload['full_name'] = $payload['first_name'].' '.$payload['last_name'];
         
         $user = User::create($payload);
         $user->assignRole($payload['role']);
@@ -49,7 +48,6 @@ class UserService
     public function update(Array $payload, String $id)
     {
         $user = User::where('id', $id)->first();
-        $payload['full_name'] = $payload['first_name'].' '.$payload['last_name'];
         return $user->update($payload);
     }
 

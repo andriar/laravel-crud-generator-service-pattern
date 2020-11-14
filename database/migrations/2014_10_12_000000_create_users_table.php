@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('full_name');
             $table->string('phone_number')->nullable();
             $table->foreignUuid('merchant_id')->nullable();
             $table->string('email')->unique();
