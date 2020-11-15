@@ -38,7 +38,7 @@ class apiGenerator extends Command
      */
     public function handle()
     {
-        $name = $this->argument('name');
+        $name = Str::studly($this->argument('name'));
         $import = Str::of('use App.Http.Controllers.'.$name.'Controller;')->replace('.', chr(92));
         $this->controller($name);
         $this->model($name); 
@@ -54,6 +54,7 @@ class apiGenerator extends Command
         Route::patch('" . Str::plural(strtolower($name)) . "/{id}', [{$name}Controller::class, 'update']);
         Route::delete('" . Str::plural(strtolower($name)) . "/{id}', [{$name}Controller::class, 'delete']);
         Route::delete('" . Str::plural(strtolower($name)) . "/{id}/permanent', [{$name}Controller::class, 'deletePermanent']);
+        Route::patch('" . Str::plural(strtolower($name)) . "/{id}/restore', [{$name}Controller::class, 'restore']);
         Route::get('" . Str::plural(strtolower($name)) . "-withtrashed', [{$name}Controller::class, 'withtrashed']);
         Route::get('" . Str::plural(strtolower($name)) . "-onlytrashed', [{$name}Controller::class, 'onlytrashed']);
     });");
