@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\ProductController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,17 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/merchants', [MerchantController::class, 'store']);
     Route::patch('/merchants/{id}', [MerchantController::class, 'update']);
     Route::delete('/merchants/{id}', [MerchantController::class, 'delete']);
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('products', [ProductController::class, 'index']);
+    Route::post('products', [ProductController::class, 'store']);
+    Route::get('products/{id}', [ProductController::class, 'show']);
+    Route::patch('products/{id}', [ProductController::class, 'update']);
+    Route::delete('products/{id}', [ProductController::class, 'delete']);
+    Route::delete('products/{id}/permanent', [ProductController::class, 'deletePermanent']);
+    Route::patch('/products/{id}/restore', [ProductController::class, 'restore']);
+    Route::get('products-withtrashed', [ProductController::class, 'withtrashed']);
+    Route::get('products-onlytrashed', [ProductController::class, 'onlytrashed']);
+    Route::patch('product-stocks/{productId}', [ProductController::class, 'updatestock']);
 });

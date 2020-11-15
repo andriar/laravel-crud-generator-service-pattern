@@ -48,12 +48,6 @@ class {{modelName}}Controller extends Controller
         // $request->validate([]);
 
         try {
-            if(!$request->role)
-            {
-                $request->merge([
-                    'role' => 'EMPLOYEE',
-                ]);
-            }
             ${{modelNameSingular}} = $this->{{modelNameSingular}}Service->store($request->all());
             return \response()->json(${{modelNameSingular}}, 201);
         } catch (\Throwable $th) {
