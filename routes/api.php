@@ -8,6 +8,7 @@ use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\ProductController; 
 use App\Http\Controllers\CategoryController; 
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\TransactionController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +78,16 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('images', [ImageController::class, 'store']);
     Route::get('images/{id}', [ImageController::class, 'show']);
     Route::delete('images/{id}', [ImageController::class, 'delete']);
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::post('transactions', [TransactionController::class, 'store']);
+    Route::get('transactions/{id}', [TransactionController::class, 'show']);
+    Route::patch('transactions/{id}', [TransactionController::class, 'update']);
+    Route::delete('transactions/{id}', [TransactionController::class, 'delete']);
+    Route::delete('transactions/{id}/permanent', [TransactionController::class, 'deletePermanent']);
+    Route::patch('transactions/{id}/restore', [TransactionController::class, 'restore']);
+    Route::get('transactions-withtrashed', [TransactionController::class, 'withtrashed']);
+    Route::get('transactions-onlytrashed', [TransactionController::class, 'onlytrashed']);
 });

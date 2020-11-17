@@ -63,4 +63,13 @@ class ProductService
 
         return $stock;
     }
+
+    public function decreaseStock($payload)
+    {
+        $stock = ProductStock::where('product_id', $payload['id'])->first();
+        $restStock = ($stock['stock'] - $payload['qty']);
+        return $stock->update([
+            'stock' => $restStock
+        ]);
+    }
 }
