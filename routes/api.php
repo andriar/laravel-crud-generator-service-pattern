@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\ProductController; 
 use App\Http\Controllers\CategoryController; 
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +70,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::patch('categories/{id}/restore', [CategoryController::class, 'restore']);
     Route::get('categories-withtrashed', [CategoryController::class, 'withtrashed']);
     Route::get('categories-onlytrashed', [CategoryController::class, 'onlytrashed']);
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('images', [ImageController::class, 'index']);
+    Route::post('images', [ImageController::class, 'store']);
+    Route::get('images/{id}', [ImageController::class, 'show']);
+    Route::delete('images/{id}', [ImageController::class, 'delete']);
 });
