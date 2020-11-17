@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Database\Query\Expression;
 class CreateProductsTable extends Migration
 {
     /**
@@ -22,16 +22,16 @@ class CreateProductsTable extends Migration
             $table->float('final_price')->default(0);
             $table->boolean('is_stockable')->default(false);
             $table->boolean('is_visible')->default(false);
-            $table->json('categories')->nullable();
+            $table->json('category_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
             $table->foreignUuid('merchant_id')->nullable();
-            $table->json('promos')->nullable();
-            $table->json('images')->nullable();
+            $table->json('promo_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
+            $table->json('image_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
 
             //unsigned nya salahhhh om ekwkkw
-            $table->float('weight')->unsigned();
-            $table->float('height')->unsigned();
-            $table->float('length')->unsigned();
-            $table->float('size')->unsigned();
+            $table->float('weight')->default(0);
+            $table->float('height')->default(0);
+            $table->float('length')->default(0);
+            $table->float('size')->default(0);
             $table->string('type')->nullable();
             $table->softDeletes();
             $table->timestamps();

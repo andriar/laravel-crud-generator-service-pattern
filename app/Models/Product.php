@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Image;
+use App\Models\Category;
 
 class Product extends Model
 {
@@ -25,10 +27,10 @@ class Product extends Model
         'final_price',
         'is_stockable',
         'is_visible',
-        'categories',
+        'category_ids',
         'merchant_id',
-        'promos',
-        'images',
+        'promo_ids',
+        'image_ids',
         'weight',
         'height',
         'length',
@@ -37,10 +39,24 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'categories' => 'json',
-        'promos' => 'json',
-        'images' => 'json'
+        'category_ids' => 'json',
+        'promo_ids' => 'json',
+        'image_ids' => 'json'
     ];
+
+    protected $appends = ['images', 'categories'];
+
+    public function getImagesAttribute()
+    {   
+        $images = Image::whereIn('id', $this->image_ids)->get();
+        return $images;
+    }
+
+    public function getCategoriesAttribute()
+    {   
+        $categories = Category::whereIn('id', $this->category_ids)->get();
+        return $categories;
+    }
 
     public function stock()
     {

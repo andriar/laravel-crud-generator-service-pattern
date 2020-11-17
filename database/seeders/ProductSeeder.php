@@ -31,9 +31,9 @@ class ProductSeeder extends Seeder
             'height' => 0,
             'length' => 0,
             'size' => 0,
-            'categories' => [
+            'category_ids' => ([
                 $category['id']
-            ]
+            ])
         ]);
 
         $productStock = ProductStock::create([

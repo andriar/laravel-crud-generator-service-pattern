@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Services\ProductService as MS;
+use App\Services\ImageService as IS;
 
 class ProductController extends Controller
 {
 
     protected $productService;
+    protected $imageService;
 
-    public function __construct(MS $productService)
+    public function __construct(MS $productService, IS $imageService)
     {
         $this->productService = $productService;
+        $this->imageService = $imageService;
     }
 
    public function index(Request $request)
@@ -53,20 +56,34 @@ class ProductController extends Controller
             'is_stockable' => 'required|boolean',
             'is_visible' => 'required|boolean',
             'merchant_id' => 'required|uuid|exists:merchants,id',
-            'promos' => 'json',
-            // 'images' => 'array',
+            'promo_ids' => 'json',
             'weight' => 'numeric',
             'height' => 'numeric',
             'length' => 'numeric',
             'size' => 'numeric',
-            // 'type' => 'numeric',
             'stock' => 'required_if:is_stockable,1',
-            'categories' => 'array',
-            'categories.*' => 'uuid|exists:categories,id',
+            'category_ids' => 'array',
+            'category_ids.*' => 'uuid|exists:categories,id',
+            'images' => 'array',
+            'images.*' => 'file|mimes:jpeg,jpg|dimensions:ratio=1/1'
         ]);
 
         try {
-            $product = $this->productService->store($request->all());
+            $images = [];
+            if(filled($request->images))
+            {
+                foreach ($request->images as $image) {
+                    $image = $this->imageService->store($image);
+                    array_push($images, $image['id']);
+                }
+            }
+            
+            $data = $request->except('images');
+            $data['image_ids'] = $images;
+           
+
+
+            $product = $this->productService->store($data);
             return \response()->json($product, 201);
         } catch (\Throwable $th) {
             return response()->json([
@@ -78,7 +95,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+            $request->validate([
             'name' => 'string',
             'description' => 'string',
             'selling_price' => 'numeric',
@@ -87,19 +104,32 @@ class ProductController extends Controller
             'is_stockable' => 'boolean',
             'is_visible' => 'boolean',
             'merchant_id' => 'uuid|exists:merchants,id',
-            'promos' => 'json',
-            // 'images' => 'array',
+            'promo_ids' => 'json',
             'weight' => 'numeric',
             'height' => 'numeric',
             'length' => 'numeric',
             'size' => 'numeric',
-            // 'type' => 'numeric',
-            'categories' => 'array',
-            'categories.*' => 'uuid|exists:categories,id',
+            'category_ids' => 'array',
+            'category_ids.*' => 'uuid|exists:categories,id',
+            'images' => 'array',
+            'images.*' => 'file|mimes:jpeg,jpg|dimensions:ratio=1/1',
+            'image_ids' => 'array',
+            'image_ids.*' => 'uuid|exists:images,id'
         ]);
 
         try {
-            $product = $this->productService->update($request->all(), $id);
+            $images = [];
+            $data = $request->except('images');
+            if(($request->images))
+            {
+                foreach ($request->images as $image) {
+                    $image = $this->imageService->store($image);
+                    array_push($images, $image['id']);
+                }
+                $data['image_ids'] = $request->image_ids ? array_merge($images, $request->image_ids) : $images;
+            }
+            
+            $product = $this->productService->update($data, $id);
             return \response()->json($product, 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -125,6 +155,10 @@ class ProductController extends Controller
     public function deletePermanent($id)
     {
         try {
+            $product = $this->productService->findById($id);
+            foreach ($product['image_ids'] as $imageId) {
+                $image = $this->imageService->delete($imageId);
+            }
             $product = $this->productService->permanentDelete($id);
             return \response()->json($product, 200);
         } catch (\Throwable $th) {
