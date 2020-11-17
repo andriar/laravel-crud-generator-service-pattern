@@ -9,9 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\Uuid;
-class User extends Authenticatable
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens, Uuid, SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, Uuid, SoftDeletes, HasRoles;
 
     protected $primaryKey = 'id';
 
@@ -23,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'full_name', 'email', 'phone_number', 'merchant_id', 'is_active', 'password', 'last_login'
+        'first_name', 'last_name', 'email', 'phone_number', 'merchant_id', 'is_active', 'password', 'last_login'
     ];
 
     /**
@@ -44,4 +46,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
     ];
+
+    protected $appends = ['full_name'];
+
+    public function getFullNameAttribute()
+    {   
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function merchant()
+    {
+        return $this->hasOne('App\Models\Merchant', 'id', 'merchant_id');
+    }
 }

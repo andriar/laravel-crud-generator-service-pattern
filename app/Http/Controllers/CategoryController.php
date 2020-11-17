@@ -3,24 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\UserService as US;
-use App\Services\MailService as MS;
-class UserController extends Controller
-{
-    protected $userService;
-    protected $mailService;
+use App\Models\Category;
+use App\Services\CategoryService as MS;
 
-    public function __construct(US $userService, MS $mailService)
+class CategoryController extends Controller
+{
+
+    protected $categoryService;
+
+    public function __construct(MS $categoryService)
     {
-        $this->userService = $userService;
-        $this->mailService = $mailService;
+        $this->categoryService = $categoryService;
     }
 
-    public function index(Request $request)
+   public function index(Request $request)
+    {
+        // try {
+            $category = $this->categoryService->fetch($request);
+            return \response()->json($category, 200);
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'error' => $th->getMessage(),
+        //         'code' => 'INTERNAL_SERVER_ERROR',
+        //     ], 500);
+        // }
+    }
+
+    public function show($id)
     {
         try {
-            $user = $this->userService->fetch($request);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->findById($id);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -32,24 +45,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone_number' => 'required|string|min:6',
-            'is_active' => 'required|boolean',
-            'password' => 'required|string|min:8',
-            'role' => 'string|in:SUPERADMIN,EMPLOYEE,OWNER,CASHIER,CHEF',
+            'name' => 'required|string|unique:categories,name,'.$id,
+            'parent_id' => 'uuid|exists:categories:id'
         ]);
 
         try {
-            if(!$request->role)
-            {
-                $request->merge([
-                    'role' => 'EMPLOYEE',
-                ]);
-            }
-            $user = $this->userService->store($request->all());
-            return \response()->json($user, 201);
+            $category = $this->categoryService->store($request->all());
+            return \response()->json($category, 201);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -61,17 +63,13 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'phone_number' => 'required|string|min:6',
-            'is_active' => 'required|boolean',
-            'password' => 'required|string|min:8',
+            'name' => 'string|unique:categories,name,'.$id,
+            'parent_id' => 'uuid|exists:categories:id'
         ]);
 
         try {
-            $user = $this->userService->update($request->all(), $id);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->update($request->all(), $id);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -83,8 +81,8 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
-            $user = $this->userService->delete($id);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->delete($id);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -96,8 +94,8 @@ class UserController extends Controller
     public function deletePermanent($id)
     {
         try {
-            $user = $this->userService->permanentDelete($id);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->permanentDelete($id);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -109,8 +107,8 @@ class UserController extends Controller
     public function restore($id)
     {
         try {
-            $user = $this->userService->restore($id);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->restore($id);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -125,8 +123,8 @@ class UserController extends Controller
             $request->merge([
                 'with_trashed' => true,
             ]);
-            $user = $this->userService->fetch($request);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->fetch($request);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -141,8 +139,8 @@ class UserController extends Controller
             $request->merge([
                 'only_trashed' => true,
             ]);
-            $user = $this->userService->fetch($request);
-            return \response()->json($user, 200);
+            $category = $this->categoryService->fetch($request);
+            return \response()->json($category, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
