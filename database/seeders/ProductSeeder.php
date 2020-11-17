@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Merchant;
+use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class ProductSeeder extends Seeder
     public function run()
     {
         $merchant = Merchant::first();
+        $category = Category::where('name', 'Minuman')->first();
 
         $product = Product::create([
             'merchant_id' => $merchant['id'],
@@ -29,6 +31,9 @@ class ProductSeeder extends Seeder
             'height' => 0,
             'length' => 0,
             'size' => 0,
+            'categories' => [
+                $category['id']
+            ]
         ]);
 
         $productStock = ProductStock::create([

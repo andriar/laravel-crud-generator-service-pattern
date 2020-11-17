@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\ProductController; 
+use App\Http\Controllers\CategoryController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +57,16 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('products-withtrashed', [ProductController::class, 'withtrashed']);
     Route::get('products-onlytrashed', [ProductController::class, 'onlytrashed']);
     Route::patch('product-stocks/{productId}', [ProductController::class, 'updatestock']);
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::post('categories', [CategoryController::class, 'store']);
+    Route::get('categories/{id}', [CategoryController::class, 'show']);
+    Route::patch('categories/{id}', [CategoryController::class, 'update']);
+    Route::delete('categories/{id}', [CategoryController::class, 'delete']);
+    Route::delete('categories/{id}/permanent', [CategoryController::class, 'deletePermanent']);
+    Route::patch('categories/{id}/restore', [CategoryController::class, 'restore']);
+    Route::get('categories-withtrashed', [CategoryController::class, 'withtrashed']);
+    Route::get('categories-onlytrashed', [CategoryController::class, 'onlytrashed']);
 });

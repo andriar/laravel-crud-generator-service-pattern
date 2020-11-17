@@ -52,7 +52,6 @@ class ProductController extends Controller
             'final_price' => 'required|numeric',
             'is_stockable' => 'required|boolean',
             'is_visible' => 'required|boolean',
-            // 'categories' => 'json',
             'merchant_id' => 'required|uuid|exists:merchants,id',
             'promos' => 'json',
             // 'images' => 'array',
@@ -61,7 +60,9 @@ class ProductController extends Controller
             'length' => 'numeric',
             'size' => 'numeric',
             // 'type' => 'numeric',
-            'stock' => 'required_if:is_stockable,1'
+            'stock' => 'required_if:is_stockable,1',
+            'categories' => 'array',
+            'categories.*' => 'uuid|exists:categories,id',
         ]);
 
         try {
@@ -85,7 +86,6 @@ class ProductController extends Controller
             'final_price' => 'numeric',
             'is_stockable' => 'boolean',
             'is_visible' => 'boolean',
-            // 'categories' => 'json',
             'merchant_id' => 'uuid|exists:merchants,id',
             'promos' => 'json',
             // 'images' => 'array',
@@ -94,6 +94,8 @@ class ProductController extends Controller
             'length' => 'numeric',
             'size' => 'numeric',
             // 'type' => 'numeric',
+            'categories' => 'array',
+            'categories.*' => 'uuid|exists:categories,id',
         ]);
 
         try {
