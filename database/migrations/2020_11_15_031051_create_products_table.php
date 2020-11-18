@@ -22,10 +22,10 @@ class CreateProductsTable extends Migration
             $table->float('final_price')->default(0);
             $table->boolean('is_stockable')->default(false);
             $table->boolean('is_visible')->default(false);
-            $table->json('category_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
+            $table->json('category_ids')->default(new Expression('(JSON_ARRAY())'));
             $table->foreignUuid('merchant_id')->nullable();
-            $table->json('promo_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
-            $table->json('image_ids')->default(new Expression('(JSON_ARRAY())'))->nullable();
+            $table->json('promo_ids')->default(new Expression('(JSON_ARRAY())'));
+            $table->json('image_ids')->default(new Expression('(JSON_ARRAY())'));
 
             //unsigned nya salahhhh om ekwkkw
             $table->float('weight')->default(0);
