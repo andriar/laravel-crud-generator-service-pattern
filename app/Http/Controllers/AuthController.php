@@ -6,19 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\UserService as US;
 use App\Services\AuthService as AuS;
-use App\Services\MerchantService as MeS;
 use Illuminate\Support\Facades\Crypt;
 class AuthController extends Controller
 {
     protected $userService;
     protected $authService;
-    protected $merchantService;
 
-    public function __construct(US $userService, AuS $authService, Mes $merchantService)
+    public function __construct(US $userService, AuS $authService)
     {
         $this->userService = $userService;
         $this->authService = $authService;
-        $this->merchantService = $merchantService;
     }
 
     public function login(Request $request)
@@ -100,16 +97,9 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
             ]);
-
-            $code = $this->merchantService->getMerchantCode($merchantData);
-            
-            $merchantData['merchant_code'] = $code;
-
-            $merchant = $this->merchantService->store($merchantData);
             
             $userData = $validated;
             $userData['role'] = "OWNER";
-            $userData['merchant_id'] = $merchant->id;
             $user = $this->userService->store($userData);
             return \response()->json($user, 201);
         } catch (\Throwable $th) {
