@@ -1,6 +1,6 @@
 ## GENERAL
 
-Point of sales API apps for **Coffee Shop** or **UMKM** would be open soon !
+Laravel 8 API CRUD Generator
 
 ## FRAMEWORK
 
@@ -38,17 +38,18 @@ example:
 `php artisan generate:crud Product`
 
 make some files:
+
 1. ProductController
 2. ProductService
 3. Product (Model)
 4. add list of CRUD api Product
 
 what u need to do is,
+
 1. tidy list of API
 2. insert some fillable field on Model
 3. add some validation on controller when store and update data
 4. **DONE!**
-
 
 ## API DOCUMENTATION
 
@@ -66,12 +67,10 @@ params join using to get data on table where has an relation, example
 
 `join=role` plural or not base on relation 1 to many or 1 to 1
 
-
-
 next u cant join more than 1 table using point (.) to separate and comma (,) to add more than 1 join table
 
-- `join=merchant.user` BASE_TABLE has relation to **MERCHANT_TABLE**, and **MERCHANT_TABLE** has relation to **USER_TABLE**
-- `join=merchant.user,role` you will get relation **MERCHANT_TABLE** and **ROLE_TABLE**
+-   `join=merchant.user` BASE_TABLE has relation to **MERCHANT_TABLE**, and **MERCHANT_TABLE** has relation to **USER_TABLE**
+-   `join=merchant.user,role` you will get relation **MERCHANT_TABLE** and **ROLE_TABLE**
 
 ### COUNT
 
